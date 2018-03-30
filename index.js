@@ -1,5 +1,5 @@
-var FLICKER_TOKEN = '';
-var BIGHUGELABS_TOKEN = '';
+var FLICKER_TOKEN = '53b558787aca514ca3822a12f202623c';
+var BIGHUGELABS_TOKEN = '31d09b9b0afe8a5df4cdf7023c6b8bb6';
 
 $(function() {
     var searchInput = $('#searchInput');
