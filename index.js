@@ -1,6 +1,3 @@
-var FLICKER_TOKEN = '53b558787aca514ca3822a12f202623c';
-var BIGHUGELABS_TOKEN = '31d09b9b0afe8a5df4cdf7023c6b8bb6';
-
 $(function() {
     var searchInput = $('#searchInput');
     var searchButton = $('#searchButton');
@@ -20,13 +17,26 @@ $(function() {
         searchInput.val(term);
     }
 
+    function handleFetchError(response) {
+        if (!response.ok) {
+            throw Error(response.statusText);
+        }
+        return response;
+    }
+
+    function logFetchError(error) {
+        console.log(error);
+    }
+
     function getPhotos(term) {
-        fetch('https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key='+FLICKER_TOKEN+'&text='+term+'&format=json&nojsoncallback=1')
+        fetch('https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key='+config.FLICKER_TOKEN+'&text='+term+'&format=json&nojsoncallback=1')
         //fetch('flickr-fixture.json')
+        .then(handleFetchError)
         .then(function(resp) {
             return resp.json();
         })
-        .then(onDataReady);
+        .then(onDataReady)
+        .catch(logFetchError);
     }
 
     function onDataReady(data) {
@@ -65,16 +75,18 @@ $(function() {
 
     // Suggested Words
     function getSynonyms(term) {
-        fetch('http://words.bighugelabs.com/api/2/'+BIGHUGELABS_TOKEN+'/'+term+'/json')
+        fetch('http://words.bighugelabs.com/api/2/'+config.BIGHUGELABS_TOKEN+'/'+term+'/json')
         //fetch('synonyms-fixture.json')
+        .then(handleFetchError)
         .then(function(resp) {
             return resp.json();
         })
         .then(onSynonymsReady)
+        .catch(logFetchError);
     }
 
     function onSynonymsReady(data) {
-        var words = data.noun.syn;
+        var words = data.noun.syn;  
         updateSynonyms(words);
     }
 
